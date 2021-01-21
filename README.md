@@ -1,2 +1,2 @@
 # openwrt_update
-  固件编译脚本！
+  openwrt固件编译脚本！
