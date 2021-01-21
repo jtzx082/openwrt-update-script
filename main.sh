@@ -5,7 +5,7 @@ echo Openwrt firmware one-click update compilation script		   #
 echo															   #
 echo script By Lenyu										       #
 echo 															   #
-echo version v1.2.0											       #
+echo version v1.2.1											       #
 echo #################################################################
 sleep 3
 clear
@@ -28,7 +28,7 @@ if [ "$new_lede" = "$old_lede" ]; then
 	echo "no_update" > /home/lenyu/nolede
 else
 	echo "update" > /home/lenyu/nolede
-	echo $new_lede > old_ledeh
+	echo $new_lede > old_lede
 fi
 echo
 ##xray
@@ -131,6 +131,9 @@ else
 	echo $new_clash > old_clash
 fi
 echo
+
+
+
 #总结判断之
 nolede=`cat /home/lenyu/nolede`
 noclash=`cat /home/lenyu/noclash`
