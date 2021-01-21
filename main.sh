@@ -17,12 +17,12 @@ git -C ~/lede rev-parse HEAD > new_lede
 new_lede=`cat new_lede`
 #判断old_lede是否存在，不存在创建
 if [ ! -f "old_lede" ]; then
-  clear	
+  clear
   echo "old_lede被删除正在创建！"
   sleep 0.1
   echo $new_lede > old_lede
 fi
-sleep 0.1 
+sleep 0.1
 old_lede=`cat old_lede`
 if [ "$new_lede" = "$old_lede" ]; then
 	echo "no_update" > /home/lenyu/nolede
@@ -50,17 +50,16 @@ echo
 new_xray=`cat new_xray`
 #判断old_xray是否存在，不存在创建
 if [ ! -f "old_xray" ]; then
-  clear	
+  clear
   echo "old_xray被删除正在创建！"
   sleep 0.1
   echo $new_xray > old_xray
 fi
-sleep 0.1 
+sleep 0.1
 old_xray=`cat old_xray`
 #有xray更新就替换最新的commit分支id
 if [ "$new_xray" = "$old_xray" ]; then
 	clear
-	echo "还没有最新的版本，请过段时间再试！"
 	echo "no_update" > /home/lenyu/noxray
 else
 	clear
@@ -78,12 +77,12 @@ git -C ~/lede/feeds/passwall rev-parse HEAD > new_passw
 new_passw=`cat new_passw`
 #判断old_passw是否存在，不存在创建
 if [ ! -f "old_passw" ]; then
-  clear	
+  clear
   echo "old_passw被删除正在创建！"
   sleep 0.1
   echo $new_passw > old_passw
 fi
-sleep 0.1 
+sleep 0.1
 old_passw=`cat old_passw`
 if [ "$new_passw" = "$old_passw" ]; then
 	echo "no_update" > /home/lenyu/nopassw
@@ -98,12 +97,12 @@ git -C ~/lede/feeds/helloworld rev-parse HEAD > new_ssr
 new_ssr=`cat new_ssr`
 #判断old_ssr是否存在，不存在创建
 if [ ! -f "old_ssr" ]; then
-  clear	
+  clear
   echo "old_ssr被删除正在创建！"
   sleep 0.1
   echo $new_ssr > old_ssr
 fi
-sleep 0.1 
+sleep 0.1
 old_ssr=`cat old_ssr`
 if [ "$new_ssr" = "$old_ssr" ]; then
 	echo "no_update" > /home/lenyu/nossr
@@ -118,12 +117,12 @@ git -C ~/lede/package/luci-app-openclash  rev-parse HEAD > new_clash
 new_clash=`cat new_clash`
 #判断old_clash是否存在，不存在创建
 if [ ! -f "old_clash" ]; then
-  clear	
+  clear
   echo "old_ssr被删除正在创建！"
   sleep 0.1
   echo $new_clash > old_clash
 fi
-sleep 0.1 
+sleep 0.1
 old_clash=`cat old_clash`
 if [ "$new_clash" = "$old_clash" ]; then
 	echo "no_update" > /home/lenyu/noclash
@@ -148,7 +147,7 @@ if [[("$nolede" = "update") || ("$noclash" = "update") || ("$noxray" = "update")
 	echo "发现更新，请稍后…"
 	clear
 	echo
-	echo "准备开始编译最新固件…" 
+	echo "准备开始编译最新固件…"
 	source /etc/environment && cd /home/lenyu/lede && ./scripts/feeds update -a  && ./scripts/feeds install -a && make defconfig && make -j8 download && make -j10 V=s &&  bash rename.sh
 	echo
 	rm -rf /home/lenyu/noxray
@@ -164,9 +163,9 @@ echo
 if [[("$nolede" = "no_update") && ("$noclash" = "no_update") && ("$noxray" = "no_update") && ("$nossr" = "no_update" ) && ("$nopassw"  = "no_update" )]]; then
 	clear
 	echo
-	echo "呃呃…检查lede/ssr+/xray/passwall/openclash源码，没有一个源码更新哟…还是稍安勿躁…" 
+	echo "呃呃…检查lede/ssr+/xray/passwall/openclash源码，没有一个源码更新哟…还是稍安勿躁…"
 fi
-#脚本结束，准备最后的清理工作	
+#脚本结束，准备最后的清理工作
 rm -rf /home/lenyu/noxray
 rm -rf /home/lenyu/noclash
 rm -rf /home/lenyu/nolede
