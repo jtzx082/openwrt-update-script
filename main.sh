@@ -12,7 +12,7 @@ clear
 cd ~/
 echo
 ##lede
-git -C ~/lede pull
+git -C ~/lede pull >/dev/null 2>&1
 git -C ~/lede rev-parse HEAD > new_lede
 new_lede=`cat new_lede`
 #判断old_lede是否存在，不存在创建
@@ -38,11 +38,11 @@ if [ ! -d  "xray_update" ]; then
 else
 	count=`ls /home/lenyu/xray_update`
 	if [ "$count" > "0" ]; then  #判断文件夹是否为0,否则git拉去xray源码
-		git -C ~/xray_update pull
+		git -C ~/xray_update pull >/dev/null 2>&1
 		git -C ~/xray_update rev-parse HEAD > ~/new_xray
 	else
 		git clone https://github.com/XTLS/Xray-core.git ~/xray_update #后面指定目录
-		git -C ~/xray_update pull
+		git -C ~/xray_update pull >/dev/null 2>&1
 		git -C ~/xray_update rev-parse HEAD > ~/new_xray
 	fi
 fi
@@ -73,7 +73,7 @@ else
 fi
 echo
 ##passwall
-git -C ~/lede/feeds/passwall pull
+git -C ~/lede/feeds/passwall pull >/dev/null 2>&1
 git -C ~/lede/feeds/passwall rev-parse HEAD > new_passw
 new_passw=`cat new_passw`
 #判断old_passw是否存在，不存在创建
@@ -93,7 +93,7 @@ else
 fi
 echo
 ##ssr+
-git -C ~/lede/feeds/helloworld pull
+git -C ~/lede/feeds/helloworld pull >/dev/null 2>&1
 git -C ~/lede/feeds/helloworld rev-parse HEAD > new_ssr
 new_ssr=`cat new_ssr`
 #判断old_ssr是否存在，不存在创建
@@ -113,7 +113,7 @@ else
 fi
 echo
 ##openclash
-git -C ~/lede/package/luci-app-openclash  pull
+git -C ~/lede/package/luci-app-openclash  pull >/dev/null 2>&1
 git -C ~/lede/package/luci-app-openclash  rev-parse HEAD > new_clash
 new_clash=`cat new_clash`
 #判断old_clash是否存在，不存在创建
