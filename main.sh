@@ -131,9 +131,6 @@ else
 	echo $new_clash > old_clash
 fi
 echo
-
-
-
 #总结判断之
 nolede=`cat /home/lenyu/nolede`
 noclash=`cat /home/lenyu/noclash`
