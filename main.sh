@@ -5,14 +5,13 @@ echo Openwrt firmware one-click update compilation script		   #
 echo															   #
 echo script By Lenyu										       #
 echo 															   #
-echo version v1.3.0											       #
+echo version v1.3.2											       #
 echo #################################################################
 sleep 3
 #获取当前脚本所在的目录
 path=$(dirname $(readlink -f $0))
 #调用
-cd ${path} >/dev/null 2>&1
-echo ${path}
+cd ${path}
 echo
 ##lede
 git -C ${path}/lede pull >/dev/null 2>&1
@@ -134,10 +133,43 @@ else
 	echo $new_clash > old_clash
 fi
 echo
-
-
-
+echo 脚本正在运行中…
 #总结判断之
+#监测如果不存在rename.sh则创建该文件
+if [ ! -f "${path}/lede/rename.sh" ]; then
+ echo "rename.sh被删除,正在创建！"
+cat>${path}/lede/rename.sh<<EOF
+#/usr/bin/bash
+path=\$(dirname \$(readlink -f \$0))
+cd \${path}
+		rm -rf \${path}/bin/targets/x86/64/*Lenyu.img.gz
+        rm -rf \${path}/bin/targets/x86/64/packages
+        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic.manifest
+        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-rootfs-squashfs.img.gz
+        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-combined-squashfs.vmdk
+        rm -rf \${path}/bin/targets/x86/64/config.seed
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.vmdk
+        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-vmlinuz
+		rm -rf \${path}/bin/targets/x86/64/sha256sums
+		rm -rf \${path}/bin/targets/x86/64/config.buildinfo
+		rm -rf \${path}/bin/targets/x86/64/feeds.buildinfo
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-kernel.bin
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.vmdk
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.vmdk
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img.gz
+		rm -rf \${path}/bin/targets/x86/64/version.buildinfo
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img
+        sleep 3
+        stre=\`sed '11!d'  \${path}/include/kernel-version.mk\` >nul 2>nul
+        sleep 2
+        mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_5.4.\`echo \${stre#* .}\`_dev_Lenyu.img.gz
+        mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_5.4.\`echo \${stre#* .}\`_uefi-gpt_dev_Lenyu.img.gz
+		exit 0
+EOF
+fi
+sleep 0.2
 nolede=`cat ${path}/nolede`
 noclash=`cat ${path}/noclash`
 noxray=`cat ${path}/noxray`
