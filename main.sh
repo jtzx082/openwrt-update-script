@@ -51,10 +51,6 @@ else
 fi
 echo
 new_xray=`cat new_xray`
-#获取当前脚本所在的目录
-path=$(dirname $(readlink -f $0))
-#调用
-cd ${path}
 echo
 ##智能判断PKG_VERSION项目的最新值##
 cat ${path}/xray_update/core/core.go > ${path}/PKG_VERSION
