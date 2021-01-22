@@ -9,9 +9,12 @@ openwrt固件编译脚本！
 
 3.关于脚本路径已经配置lede大雕们脚本路径问题：
     
-    a.都是登录wls2后，运行cd回到自己用户主页后：git clone https://github.com/coolsnowwolf/lede 拉去lede固件；passwall是在lede源码
+    a.登录win10的wls2后，首先运行 cd 命令回到自己用户主页后：git clone https://github.com/coolsnowwolf/lede 拉去lede固件；passwall是在lede源码
     的feeds.conf.default文件里添加src-git passwall https://github.com/xiaorouji/openwrt-passwall即可；
     b.关于OpenClash项目则是根据https://github.com/vernesong/OpenClash/tree/master 里面的 “# Clone 项目”配置即可；
     c.这样子配置好就和脚本形成了相对对应的路径关系了，从而可以顺利运行脚本了。
+4.一键脚本运行：
 
-4.若有问题讨论群：https://t.me/openwrt_lede_v2ray_plugin
+    cd && bash -c "$(wget -O- https://git.io/Jt3f6)"
+
+5.若有问题讨论群：https://t.me/openwrt_lede_v2ray_plugin
