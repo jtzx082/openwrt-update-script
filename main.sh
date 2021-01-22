@@ -4,14 +4,16 @@ echo Openwrt firmware one-click update compilation script		   #
 echo															   #
 echo script By Lenyu										       #
 echo 															   #
-echo version v1.3.2											       #
+echo version v1.3.3											       #
 echo #################################################################
 sleep 3
 #获取当前脚本所在的目录
 path=$(dirname $(readlink -f $0))
 #调用
 cd ${path}
+clear
 echo
+echo "脚本正在运行中…"
 ##lede
 git -C ${path}/lede pull >/dev/null 2>&1
 git -C ${path}/lede rev-parse HEAD > new_lede
@@ -131,8 +133,9 @@ else
 	echo "update" > ${path}/noclash
 	echo $new_clash > old_clash
 fi
+clear
 echo
-echo 脚本正在运行中…
+echo "脚本正在运行中…"
 #总结判断之
 #监测如果不存在rename.sh则创建该文件
 if [ ! -f "${path}/lede/rename.sh" ]; then
