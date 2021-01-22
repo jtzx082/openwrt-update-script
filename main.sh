@@ -1,5 +1,4 @@
 #usr/bin/bash
-#当前的md5获取方式不怎么牢靠，有待优化
 echo ###############################################################
 echo Openwrt firmware one-click update compilation script		   #
 echo															   #
