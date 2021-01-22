@@ -3,7 +3,8 @@ openwrt固件编译脚本！
 
 #注意：
     
-    脚本还有个bug，那就是没有修改默认的xray的配置文件😂（改成获取最新的git commit的方式来更新，而不是默认的等着作者releases），
+    脚本还有个bug，那就是没有修改默认的xray的配置文件😂（改成获取最新的git commit的方式来更新，而不是默认的等着作者
+    releases），
     编译可能报错，晚上或者明天有时间再改！
 
 相比之前的脚本，全新编写，更加精准和科学！
@@ -14,7 +15,8 @@ openwrt固件编译脚本！
 
 3.关于脚本路径以及配置lede大雕们源码路径问题：
     
-    a.登录win10的wls2后，首先运行 cd 命令回到自己用户主页后：git clone https://github.com/coolsnowwolf/lede 拉去lede固件；passwall是在lede源码
+    a.登录win10的wls2后，首先运行 cd 命令回到自己用户主页后：git clone https://github.com/coolsnowwolf/lede 
+    拉去lede固件；passwall是在lede源码
     的feeds.conf.default文件里添加src-git passwall https://github.com/xiaorouji/openwrt-passwall即可；
     b.关于OpenClash项目则是根据https://github.com/vernesong/OpenClash/tree/master 里面的 “# Clone 项目”配置即可；
     c.这样子配置好就和脚本形成了相对对应的路径关系了，从而可以顺利运行脚本了。
