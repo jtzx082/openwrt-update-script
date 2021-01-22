@@ -4,7 +4,7 @@ echo Openwrt firmware one-click update compilation script		   #
 echo															   #
 echo script By Lenyu										       #
 echo 															   #
-echo version v1.3.3											       #
+echo version v2.1.0										       #
 echo #################################################################
 sleep 3
 #获取当前脚本所在的目录
@@ -51,6 +51,49 @@ else
 fi
 echo
 new_xray=`cat new_xray`
+#获取当前脚本所在的目录
+path=$(dirname $(readlink -f $0))
+#调用
+cd ${path}
+echo
+##智能判断PKG_VERSION项目的最新值##
+cat ${path}/xray_update/core/core.go > ${path}/PKG_VERSION
+grep "version  =" ${path}/PKG_VERSION > ${path}/PKG_VERSION1
+cat  ${path}/PKG_VERSION1 | cut -d \" -f 2 > ${path}/PKG_VERSION
+new_pkg_version=`cat ${path}/PKG_VERSION`
+grep "PKG_VERSION:=" ${path}/lede/package/lean/xray/Makefile > ${path}/PKG_VERSION2
+cat  ${path}/PKG_VERSION2 | cut -d = -f 2 > ${path}/PKG_VERSION3
+old_pkg_version=`cat ${path}/PKG_VERSION3`
+if [ "$new_pkg_version" != "$old_pkg_version" ]; then
+	echo "xray有新版本号，正在替换最新的版本号…"
+	sed -i "s/.*PKG_VERSION:.*/PKG_VERSION:=$new_pkg_version/" ${path}/lede/package/lean/xray/Makefile
+fi
+rm -rf ${path}/PKG_VERSION*
+echo
+#判断Makefile是否为源码版，如果是这修改为以git头更新的文件
+grep "PKG_SOURCE_VERSION:=" ${path}/lede/package/lean/xray/Makefile > ${path}/jud_Makefile
+if [ -s ${path}/jud_Makefile ]; then # -s 判断文件长度是否不为0，为0说明Makefile是源码版，需修改
+echo "Makefile已是修改过的版本，故不需再修改…"
+echo
+else
+echo "Makefile正在被脚本修改…"
+echo
+sed -i 's/PKG_RELEASE:=1/PKG_RELEASE:=2/' ${path}/lede/package/lean/xray/Makefile
+sed -i 's/PKG_BUILD_DIR:=$(BUILD_DIR)\/Xray-core-$(PKG_VERSION)/#PKG_BUILD_DIR:=$(BUILD_DIR)\/Xray-core-$(PKG_VERSION)/' ${path}/lede/package/lean/xray/Makefile
+sed -i 's/PKG_SOURCE:=xray-core-$(PKG_VERSION).tar.gz/#PKG_SOURCE:=xray-core-$(PKG_VERSION).tar.gz/' ${path}/lede/package/lean/xray/Makefile
+sed -i 's/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/XTLS\/xray-core\/tar.gz\/v$(PKG_VERSION)?/#PKG_SOURCE_URL:=https:\/\/codeload.github.com\/XTLS\/xray-core\/tar.gz\/v$(PKG_VERSION)?/' ${path}/lede/package/lean/xray/Makefile
+sed -i 's/PKG_HASH:=/#PKG_HASH:=/' ${path}/lede/package/lean/xray/Makefile
+sleep 0.1
+#然后插入自定义的内容
+sed -i '18 a PKG_SOURCE_PROTO:=git' ${path}/lede/package/lean/xray/Makefile
+sed -i '19 a PKG_SOURCE_URL:=https://github.com/XTLS/xray-core.git' ${path}/lede/package/lean/xray/Makefile
+sed -i '20 a PKG_SOURCE_VERSION:=7da97635b28bfa7296fe79bbe7cd804a684317d9' ${path}/lede/package/lean/xray/Makefile
+sed -i '21 a PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz' ${path}/lede/package/lean/xray/Makefile
+fi
+rm -rf jud_Makefile
+echo
+##智能判断PKG_VERSION项目的最新值##
+echo
 #判断old_xray是否存在，不存在创建
 if [ ! -f "old_xray" ]; then
   clear
@@ -136,6 +179,7 @@ fi
 clear
 echo
 echo "脚本正在运行中…"
+sleep 1
 #总结判断之
 #监测如果不存在rename.sh则创建该文件
 if [ ! -f "${path}/lede/rename.sh" ]; then
@@ -144,31 +188,31 @@ cat>${path}/lede/rename.sh<<EOF
 #/usr/bin/bash
 path=\$(dirname \$(readlink -f \$0))
 cd \${path}
-		    rm -rf \${path}/bin/targets/x86/64/*Lenyu.img.gz
+		rm -rf \${path}/bin/targets/x86/64/*Lenyu.img.gz
         rm -rf \${path}/bin/targets/x86/64/packages
         rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic.manifest
         rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-rootfs-squashfs.img.gz
         rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-combined-squashfs.vmdk
         rm -rf \${path}/bin/targets/x86/64/config.seed
-		    rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.vmdk
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.vmdk
         rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-vmlinuz
-        rm -rf \${path}/bin/targets/x86/64/sha256sums
-        rm -rf \${path}/bin/targets/x86/64/config.buildinfo
-        rm -rf \${path}/bin/targets/x86/64/feeds.buildinfo
-        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-kernel.bin
-        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.vmdk
-        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.vmdk
-        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img.gz
-        rm -rf \${path}/bin/targets/x86/64/version.buildinfo
-        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img
-        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
-        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img
+		rm -rf \${path}/bin/targets/x86/64/sha256sums
+		rm -rf \${path}/bin/targets/x86/64/config.buildinfo
+		rm -rf \${path}/bin/targets/x86/64/feeds.buildinfo
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-kernel.bin
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.vmdk
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.vmdk
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img.gz
+		rm -rf \${path}/bin/targets/x86/64/version.buildinfo
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img
         sleep 3
         stre=\`sed '11!d'  \${path}/include/kernel-version.mk\` >nul 2>nul
         sleep 2
         mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_5.4.\`echo \${stre#* .}\`_dev_Lenyu.img.gz
         mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_5.4.\`echo \${stre#* .}\`_uefi-gpt_dev_Lenyu.img.gz
-		  exit 0
+		exit 0
 EOF
 fi
 sleep 0.2
