@@ -4,7 +4,7 @@ echo Openwrt firmware one-click update compilation script		   #
 echo															   #
 echo script By Lenyu										       #
 echo 															   #
-echo version v2.1.0										       #
+echo version v2.1.1										       #
 echo #################################################################
 sleep 3
 #获取当前脚本所在的目录
