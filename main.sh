@@ -15,8 +15,12 @@ clear
 echo
 echo "脚本正在运行中…"
 ##lede
-rm -rf ${path}/lede/package/lean/xray
-rm -rf ${path}/lede/tmp
+#由于源码xray位置改变，需要加入一个判断清除必要的文件
+if [ ! -d  "${path}/lede/feeds/helloworld/xray" ]; then
+	sed -i 's/#src-git helloworld/src-git helloworld/'  ${path}/lede/feeds.conf.default
+	rm -rf ${path}/lede/package/lean/xray
+	rm -rf ${path}/lede/tmp
+fi
 echo
 git -C ${path}/lede pull >/dev/null 2>&1
 git -C ${path}/lede rev-parse HEAD > new_lede
@@ -38,11 +42,14 @@ else
 fi
 echo
 ##xray
-clear
-echo
-echo "正在更新feeds源，请稍后…"
-cd ${path}/lede && ./scripts/feeds update -a >/dev/null 2>&1 && ./scripts/feeds install -a >/dev/null 2>&1
-cd ${path}
+#由于源码xray位置改变，需要加入一个判断
+if [ ! -d  "${path}/lede/feeds/helloworld/xray" ]; then
+	clear
+	echo
+	echo "正在更新feeds源，请稍后…"
+	cd ${path}/lede && ./scripts/feeds update -a >/dev/null 2>&1 && ./scripts/feeds install -a >/dev/null 2>&1
+	cd ${path}
+fi
 clear
 echo
 echo "脚本正在运行中…"
