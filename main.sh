@@ -70,16 +70,17 @@ echo
 grep "PKG_SOURCE_VERSION:=" ${path}/lede/package/lean/xray/Makefile > ${path}/jud_Makefile
 if [ -s ${path}/jud_Makefile ]; then # -s 判断文件长度是否不为0，为0说明Makefile是源码版，需修改
 echo "Makefile已是修改过的版本，故不需再修改…"
+sleep 0.2
 echo
 else
 echo "Makefile正在被脚本修改…"
+sleep 0.1
 echo
 sed -i 's/PKG_RELEASE:=1/PKG_RELEASE:=2/' ${path}/lede/package/lean/xray/Makefile
 sed -i 's/PKG_BUILD_DIR:=$(BUILD_DIR)\/Xray-core-$(PKG_VERSION)/#PKG_BUILD_DIR:=$(BUILD_DIR)\/Xray-core-$(PKG_VERSION)/' ${path}/lede/package/lean/xray/Makefile
 sed -i 's/PKG_SOURCE:=xray-core-$(PKG_VERSION).tar.gz/#PKG_SOURCE:=xray-core-$(PKG_VERSION).tar.gz/' ${path}/lede/package/lean/xray/Makefile
 sed -i 's/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/XTLS\/xray-core\/tar.gz\/v$(PKG_VERSION)?/#PKG_SOURCE_URL:=https:\/\/codeload.github.com\/XTLS\/xray-core\/tar.gz\/v$(PKG_VERSION)?/' ${path}/lede/package/lean/xray/Makefile
 sed -i 's/PKG_HASH:=/#PKG_HASH:=/' ${path}/lede/package/lean/xray/Makefile
-sleep 0.1
 #然后插入自定义的内容
 sed -i '18 a PKG_SOURCE_PROTO:=git' ${path}/lede/package/lean/xray/Makefile
 sed -i '19 a PKG_SOURCE_URL:=https://github.com/XTLS/xray-core.git' ${path}/lede/package/lean/xray/Makefile
@@ -105,7 +106,6 @@ if [ "$new_xray" = "$old_xray" ]; then
 	echo "no_update" > ${path}/noxray
 else
 	clear
-	echo "发现更新，准备切换到最新的commit分支MD5"
 	echo "update" > ${path}/noxray
 	sleep 1
 	#替换最新的md5值 sed要使用""才会应用变量
