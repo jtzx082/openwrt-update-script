@@ -4,7 +4,7 @@ echo Openwrt firmware one-click update compilation script		   #
 echo															   #
 echo script By Lenyu										       #
 echo 															   #
-echo version v2.1.1										       #
+echo version v2.1.2										       #
 echo #################################################################
 sleep 3
 #获取当前脚本所在的目录
@@ -15,6 +15,9 @@ clear
 echo
 echo "脚本正在运行中…"
 ##lede
+rm -rf ${path}/lede/package/lean/xray
+rm -rf ${path}/lede/tmp
+echo
 git -C ${path}/lede pull >/dev/null 2>&1
 git -C ${path}/lede rev-parse HEAD > new_lede
 new_lede=`cat new_lede`
@@ -35,6 +38,14 @@ else
 fi
 echo
 ##xray
+clear
+echo
+echo "正在更新feeds源，请稍后…"
+cd ${path}/lede && ./scripts/feeds update -a >/dev/null 2>&1 && ./scripts/feeds install -a >/dev/null 2>&1
+cd ${path}
+clear
+echo
+echo "脚本正在运行中…"
 if [ ! -d  "xray_update" ]; then
 	echo "xray_update文件夹不存在，准备创建…"
 	mkdir -p ${path}/xray_update
@@ -57,35 +68,38 @@ cat ${path}/xray_update/core/core.go > ${path}/PKG_VERSION
 grep "version  =" ${path}/PKG_VERSION > ${path}/PKG_VERSION1
 cat  ${path}/PKG_VERSION1 | cut -d \" -f 2 > ${path}/PKG_VERSION
 new_pkg_version=`cat ${path}/PKG_VERSION`
-grep "PKG_VERSION:=" ${path}/lede/package/lean/xray/Makefile > ${path}/PKG_VERSION2
+grep "PKG_VERSION:=" ${path}/lede/feeds/helloworld/xray/Makefile > ${path}/PKG_VERSION2
 cat  ${path}/PKG_VERSION2 | cut -d = -f 2 > ${path}/PKG_VERSION3
 old_pkg_version=`cat ${path}/PKG_VERSION3`
 if [ "$new_pkg_version" != "$old_pkg_version" ]; then
 	echo "xray有新版本号，正在替换最新的版本号…"
-	sed -i "s/.*PKG_VERSION:.*/PKG_VERSION:=$new_pkg_version/" ${path}/lede/package/lean/xray/Makefile
+	sed -i "s/.*PKG_VERSION:.*/PKG_VERSION:=$new_pkg_version/" ${path}/lede/feeds/helloworld/xray/Makefile
 fi
 rm -rf ${path}/PKG_VERSION*
 echo
 #判断Makefile是否为源码版，如果是这修改为以git头更新的文件
-grep "PKG_SOURCE_VERSION:=" ${path}/lede/package/lean/xray/Makefile > ${path}/jud_Makefile
+grep "PKG_SOURCE_VERSION:=" ${path}/lede/feeds/helloworld/xray/Makefile > ${path}/jud_Makefile
 if [ -s ${path}/jud_Makefile ]; then # -s 判断文件长度是否不为0，为0说明Makefile是源码版，需修改
+clear
+echo
 echo "Makefile已是修改过的版本，故不需再修改…"
-sleep 0.2
 echo
 else
+clear
+echo
 echo "Makefile正在被脚本修改…"
 sleep 0.1
 echo
-sed -i 's/PKG_RELEASE:=1/PKG_RELEASE:=2/' ${path}/lede/package/lean/xray/Makefile
-sed -i 's/PKG_BUILD_DIR:=$(BUILD_DIR)\/Xray-core-$(PKG_VERSION)/#PKG_BUILD_DIR:=$(BUILD_DIR)\/Xray-core-$(PKG_VERSION)/' ${path}/lede/package/lean/xray/Makefile
-sed -i 's/PKG_SOURCE:=xray-core-$(PKG_VERSION).tar.gz/#PKG_SOURCE:=xray-core-$(PKG_VERSION).tar.gz/' ${path}/lede/package/lean/xray/Makefile
-sed -i 's/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/XTLS\/xray-core\/tar.gz\/v$(PKG_VERSION)?/#PKG_SOURCE_URL:=https:\/\/codeload.github.com\/XTLS\/xray-core\/tar.gz\/v$(PKG_VERSION)?/' ${path}/lede/package/lean/xray/Makefile
-sed -i 's/PKG_HASH:=/#PKG_HASH:=/' ${path}/lede/package/lean/xray/Makefile
+sed -i 's/PKG_RELEASE:=1/PKG_RELEASE:=2/' ${path}/lede/feeds/helloworld/xray/Makefile
+sed -i 's/PKG_BUILD_DIR:=$(BUILD_DIR)\/Xray-core-$(PKG_VERSION)/#PKG_BUILD_DIR:=$(BUILD_DIR)\/Xray-core-$(PKG_VERSION)/' ${path}/lede/feeds/helloworld/xray/Makefile
+sed -i 's/PKG_SOURCE:=xray-core-$(PKG_VERSION).tar.gz/#PKG_SOURCE:=xray-core-$(PKG_VERSION).tar.gz/' ${path}/lede/feeds/helloworld/xray/Makefile
+sed -i 's/PKG_SOURCE_URL:=https:\/\/codeload.github.com\/XTLS\/xray-core\/tar.gz\/v$(PKG_VERSION)?/#PKG_SOURCE_URL:=https:\/\/codeload.github.com\/XTLS\/xray-core\/tar.gz\/v$(PKG_VERSION)?/' ${path}/lede/feeds/helloworld/xray/Makefile
+sed -i 's/PKG_HASH:=/#PKG_HASH:=/' ${path}/lede/feeds/helloworld/xray/Makefile
 #然后插入自定义的内容
-sed -i '18 a PKG_SOURCE_PROTO:=git' ${path}/lede/package/lean/xray/Makefile
-sed -i '19 a PKG_SOURCE_URL:=https://github.com/XTLS/xray-core.git' ${path}/lede/package/lean/xray/Makefile
-sed -i '20 a PKG_SOURCE_VERSION:=7da97635b28bfa7296fe79bbe7cd804a684317d9' ${path}/lede/package/lean/xray/Makefile
-sed -i '21 a PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz' ${path}/lede/package/lean/xray/Makefile
+sed -i '18 a PKG_SOURCE_PROTO:=git' ${path}/lede/feeds/helloworld/xray/Makefile
+sed -i '19 a PKG_SOURCE_URL:=https://github.com/XTLS/xray-core.git' ${path}/lede/feeds/helloworld/xray/Makefile
+sed -i '20 a PKG_SOURCE_VERSION:=7da97635b28bfa7296fe79bbe7cd804a684317d9' ${path}/lede/feeds/helloworld/xray/Makefile
+sed -i '21 a PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz' ${path}/lede/feeds/helloworld/xray/Makefile
 fi
 rm -rf jud_Makefile
 echo
@@ -93,7 +107,6 @@ echo
 echo
 #判断old_xray是否存在，不存在创建
 if [ ! -f "old_xray" ]; then
-  clear
   echo "old_xray被删除正在创建！"
   sleep 0.1
   echo $new_xray > old_xray
@@ -102,14 +115,12 @@ sleep 0.1
 old_xray=`cat old_xray`
 #有xray更新就替换最新的commit分支id
 if [ "$new_xray" = "$old_xray" ]; then
-	clear
 	echo "no_update" > ${path}/noxray
 else
-	clear
 	echo "update" > ${path}/noxray
 	sleep 1
 	#替换最新的md5值 sed要使用""才会应用变量
-	sed -i "s/.*PKG_SOURCE_VERSION:.*/PKG_SOURCE_VERSION:=$new_xray/" ${path}/lede/package/lean/xray/Makefile
+	sed -i "s/.*PKG_SOURCE_VERSION:.*/PKG_SOURCE_VERSION:=$new_xray/" ${path}/lede/feeds/helloworld/xray/Makefile
 	echo $new_xray > old_xray
 fi
 echo
@@ -119,7 +130,6 @@ git -C ${path}/lede/feeds/passwall rev-parse HEAD > new_passw
 new_passw=`cat new_passw`
 #判断old_passw是否存在，不存在创建
 if [ ! -f "old_passw" ]; then
-  clear
   echo "old_passw被删除正在创建！"
   sleep 0.1
   echo $new_passw > old_passw
@@ -139,7 +149,6 @@ git -C ${path}/lede/feeds/helloworld rev-parse HEAD > new_ssr
 new_ssr=`cat new_ssr`
 #判断old_ssr是否存在，不存在创建
 if [ ! -f "old_ssr" ]; then
-  clear
   echo "old_ssr被删除正在创建！"
   sleep 0.1
   echo $new_ssr > old_ssr
@@ -159,7 +168,6 @@ git -C ${path}/lede/package/luci-app-openclash  rev-parse HEAD > new_clash
 new_clash=`cat new_clash`
 #判断old_clash是否存在，不存在创建
 if [ ! -f "old_clash" ]; then
-  clear
   echo "old_ssr被删除正在创建！"
   sleep 0.1
   echo $new_clash > old_clash
@@ -172,10 +180,7 @@ else
 	echo "update" > ${path}/noclash
 	echo $new_clash > old_clash
 fi
-clear
-echo
-echo "脚本正在运行中…"
-sleep 1
+sleep 0.2
 #总结判断之
 #监测如果不存在rename.sh则创建该文件
 if [ ! -f "${path}/lede/rename.sh" ]; then
@@ -225,7 +230,7 @@ if [[("$nolede" = "update") || ("$noclash" = "update") || ("$noxray" = "update")
 	clear
 	echo
 	echo "准备开始编译最新固件…"
-	source /etc/environment && cd ${path}/lede && ./scripts/feeds update -a  && ./scripts/feeds install -a && make defconfig && make -j8 download && make -j10 V=s &&  bash rename.sh
+	source /etc/environment && cd ${path}/lede && ./scripts/feeds update -a >/dev/null 2>&1 && ./scripts/feeds install -a >/dev/null 2>&1 && make defconfig && make -j8 download && make -j10 V=s &&  bash rename.sh
 	echo
 	#cd ${path}
 	rm -rf ${path}/noxray
