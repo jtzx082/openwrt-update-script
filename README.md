@@ -9,7 +9,7 @@ openwrt固件编译脚本！
 
 2.前提是自己配置好了lean大佬lede源码，以及配置好openclash、passwall并成功编译过（路径、源码配置等参考第3项说明）
 
-3.关于脚本路径以及配置lede大雕们源码路径问题【无比认真阅读，非常重要！】：
+3.关于脚本路径以及配置lede大雕们源码路径问题【务必认真阅读，非常重要！】：
     
     a.登录win10的wls2后，首先运行 cd 命令回到自己用户主页后：git clone https://github.com/coolsnowwolf/lede拉去
     lede固件；passwall是在lede源码的feeds.conf.default文件里添加src-git passwall https://github.com/xiaorouji/openwrt-passwall即可；
