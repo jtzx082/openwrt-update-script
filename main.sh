@@ -4,7 +4,7 @@ echo Openwrt firmware one-click update compilation script		   #
 echo															   #
 echo script By Lenyu										       #
 echo 															   #
-echo version v2.1.2										       #
+echo version v2.1.3										       #
 echo #################################################################
 sleep 3
 #获取当前脚本所在的目录
@@ -21,6 +21,8 @@ if [ ! -d  "${path}/lede/feeds/helloworld/xray" ]; then
 	rm -rf ${path}/lede/package/lean/xray
 	rm -rf ${path}/lede/tmp
 fi
+#清理
+rm -rf ${path}/lede/rename.sh
 echo
 git -C ${path}/lede pull >/dev/null 2>&1
 git -C ${path}/lede rev-parse HEAD > new_lede
@@ -89,7 +91,7 @@ grep "PKG_SOURCE_VERSION:=" ${path}/lede/feeds/helloworld/xray/Makefile > ${path
 if [ -s ${path}/jud_Makefile ]; then # -s 判断文件长度是否不为0，为0说明Makefile是源码版，需修改
 clear
 echo
-echo "Makefile已是修改过的版本，故不需再修改…"
+echo "脚本正在努力工作中，请稍微…"
 echo
 else
 clear
@@ -191,11 +193,18 @@ sleep 0.2
 #总结判断之
 #监测如果不存在rename.sh则创建该文件
 if [ ! -f "${path}/lede/rename.sh" ]; then
- echo "rename.sh被删除,正在创建！"
 cat>${path}/lede/rename.sh<<EOF
 #/usr/bin/bash
 path=\$(dirname \$(readlink -f \$0))
 cd \${path}
+	if [ ! -f ! -f \${path}/bin/targets/x86/64/*combined.img.gz ]; then
+		echo
+		echo "您编译时未选择压缩固件，故不进行重命名操作…"
+		echo
+		echo "为了减少固件体积，建议选择压缩（运行make menuconfig命令，在Target Images下勾选[*] GZip images）"
+		echo
+		exit 2
+	fi
 	rm -rf \${path}/bin/targets/x86/64/*Lenyu.img.gz
     	rm -rf \${path}/bin/targets/x86/64/packages
     	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic.manifest
@@ -204,7 +213,6 @@ cd \${path}
     	rm -rf \${path}/bin/targets/x86/64/config.seed
 	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.vmdk
     	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-vmlinuz
-	rm -rf \${path}/bin/targets/x86/64/sha256sums
 	rm -rf \${path}/bin/targets/x86/64/config.buildinfo
 	rm -rf \${path}/bin/targets/x86/64/feeds.buildinfo
 	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-kernel.bin
@@ -220,7 +228,7 @@ cd \${path}
     sleep 2
     mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_5.4.\`echo \${stre#* .}\`_dev_Lenyu.img.gz
     mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_5.4.\`echo \${stre#* .}\`_uefi-gpt_dev_Lenyu.img.gz
-		exit 0
+	exit 0
 EOF
 fi
 sleep 0.2
@@ -239,15 +247,43 @@ if [[("$nolede" = "update") || ("$noclash" = "update") || ("$noxray" = "update")
 	echo "准备开始编译最新固件…"
 	source /etc/environment && cd ${path}/lede && ./scripts/feeds update -a >/dev/null 2>&1 && ./scripts/feeds install -a >/dev/null 2>&1 && make defconfig && make -j8 download && make -j10 V=s &&  bash rename.sh
 	echo
-	#cd ${path}
+	cd ${path}
 	rm -rf ${path}/noxray
 	rm -rf ${path}/noclash
 	rm -rf ${path}/nolede
 	rm -rf ${path}/nossr
 	rm -rf ${path}/nopassw
-	echo "固件编译成功，脚本退出！"
-	echo
-	exit 0
+	if [ ! -f ${path}/lede/bin/targets/x86/64/sha256sums ]; then
+		echo
+		echo "固件编译出错，请到${path}/lede/bin/targets/x86/64/目录下查看…"
+		echo
+		exit 0
+	else
+		grep "*config.buildinfo" ${path}/lede/bin/targets/x86/64/sha256sums > ${path}/sha256sums
+		sleep 0.1
+		cat ${path}/sha256sums | cut -d' ' -f 1 > ${path}/xray_update/new_sha256sums
+		new_sha256sums=`cat ${path}/xray_update/new_sha256sums`
+		if [ ! -f ${path}/xray_update/old_sha256sums ]; then
+			echo $new_sha256sums > ${path}/xray_update/old_sha256sums
+		fi
+		old_sha256sums=`cat ${path}/xray_update/old_sha256sums`
+		if [ "$new_sha256sums" = "$old_sha256sums" ]; then
+			echo
+			echo "固件编译成功，脚本退出！"
+			echo
+			echo "编译好的固件在${path}/lede/bin/targets/x86/64/目录下，enjoy！"
+			echo
+			echo $new_sha256sums > ${path}/xray_update/old_sha256sums
+			rm -rf ${path}/lede/bin/targets/x86/64/sha256sums
+			exit 0
+		else
+			echo
+			echo "固件编译出错，请到${path}/lede/bin/targets/x86/64/目录下查看…"
+			echo
+			rm -rf ${path}/lede/bin/targets/x86/64/sha256sums
+			exit 0
+		fi
+	fi
 fi
 echo
 if [[("$nolede" = "no_update") && ("$noclash" = "no_update") && ("$noxray" = "no_update") && ("$nossr" = "no_update" ) && ("$nopassw"  = "no_update" )]]; then
