@@ -255,34 +255,18 @@ if [[("$nolede" = "update") || ("$noclash" = "update") || ("$noxray" = "update")
 	rm -rf ${path}/nopassw
 	if [ ! -f ${path}/lede/bin/targets/x86/64/sha256sums ]; then
 		echo
-		echo "固件编译出错，请到${path}/lede/bin/targets/x86/64/目录下查看…"
+		echo "固件编译出错，请到${path}/lede/bin/targets/x86/64/目录下查看1…"
 		echo
 		exit 0
 	else
-		grep "*config.buildinfo" ${path}/lede/bin/targets/x86/64/sha256sums > ${path}/sha256sums
-		sleep 0.1
-		cat ${path}/sha256sums | cut -d' ' -f 1 > ${path}/xray_update/new_sha256sums
-		new_sha256sums=`cat ${path}/xray_update/new_sha256sums`
-		if [ ! -f ${path}/xray_update/old_sha256sums ]; then
-			echo $new_sha256sums > ${path}/xray_update/old_sha256sums
-		fi
-		old_sha256sums=`cat ${path}/xray_update/old_sha256sums`
-		if [ "$new_sha256sums" = "$old_sha256sums" ]; then
-			echo
-			echo "固件编译成功，脚本退出！"
-			echo
-			echo "编译好的固件在${path}/lede/bin/targets/x86/64/目录下，enjoy！"
-			echo
-			echo $new_sha256sums > ${path}/xray_update/old_sha256sums
-			rm -rf ${path}/lede/bin/targets/x86/64/sha256sums
-			exit 0
-		else
-			echo
-			echo "固件编译出错，请到${path}/lede/bin/targets/x86/64/目录下查看…"
-			echo
-			rm -rf ${path}/lede/bin/targets/x86/64/sha256sums
-			exit 0
-		fi
+		echo
+		echo "固件编译成功，脚本退出！"
+		echo
+		echo "编译好的固件在${path}/lede/bin/targets/x86/64/目录下，enjoy！"
+		echo
+		echo $new_sha256sums > ${path}/xray_update/old_sha256sums
+		rm -rf ${path}/lede/bin/targets/x86/64/sha256sums
+		exit 0
 	fi
 fi
 echo
