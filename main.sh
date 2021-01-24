@@ -238,7 +238,7 @@ noxray=`cat ${path}/noxray`
 nossr=`cat ${path}/nossr`
 nopassw=`cat ${path}/nopassw`
 sleep 0.5
-if [[("$nolede" = "update") || ("$noclash" = "update") || ("$noxray" = "update") || ("$nossr" = "update" ) || ("$nopassw"  = "update" )]]; then
+if [[ ("$nolede" = "update") || ("$noclash" = "update") || ("$noxray" = "update") || ("$nossr" = "update" ) || ("$nopassw"  = "update" ) ]]; then
 	clear
 	echo
 	echo "发现更新，请稍后…"
@@ -270,7 +270,7 @@ if [[("$nolede" = "update") || ("$noclash" = "update") || ("$noxray" = "update")
 	fi
 fi
 echo
-if [[("$nolede" = "no_update") && ("$noclash" = "no_update") && ("$noxray" = "no_update") && ("$nossr" = "no_update" ) && ("$nopassw"  = "no_update" )]]; then
+if [[ ("$nolede" = "no_update") && ("$noclash" = "no_update") && ("$noxray" = "no_update") && ("$nossr" = "no_update" ) && ("$nopassw"  = "no_update" ) ]]; then
 	clear
 	echo
 	echo "呃呃…检查lede/ssr+/xray/passwall/openclash源码，没有一个源码更新哟…还是稍安勿躁…"
