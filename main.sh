@@ -4,7 +4,7 @@ echo Openwrt firmware one-click update compilation script		   #
 echo															   #
 echo script By Lenyu										       #
 echo 															   #
-echo version v2.1.3										       #
+echo version v2.1.4									       #
 echo #################################################################
 sleep 3
 #获取当前脚本所在的目录
@@ -189,9 +189,41 @@ else
 	echo "update" > ${path}/noclash
 	echo $new_clash > old_clash
 fi
-sleep 0.2
-#总结判断之
-#监测如果不存在rename.sh则创建该文件
+sleep 0.1
+####智能判断并替换大雕openwrt版本号的变动并自定义格式####
+#下载GitHub使用raw页面，-P 指定目录 -O强制覆盖效果；
+wget -P ${path}/wget https://raw.githubusercontent.com/coolsnowwolf/lede/master/package/lean/default-settings/files/zzz-default-settings -O  ${path}/wget/zzz-default-settings >/dev/null 2>&1
+sleep 0.3
+#-s代表文件存在不为空,!将他取反
+if [ -s  "${path}/wget/zzz-default-settings" ]; then
+	grep "DISTRIB_REVISION=" ${path}/wget/zzz-default-settings | cut -d \' -f 2 > ${path}/wget/DISTRIB_REVISION1
+	new_DISTRIB_REVISION=`cat ${path}/wget/DISTRIB_REVISION1`
+	#本地的文件，作为判断
+	grep "DISTRIB_REVISION=" ${path}/lede/package/lean/default-settings/files/zzz-default-settings | cut -d \' -f 2 > ${path}/wget/DISTRIB_REVISION3
+	old_DISTRIB_REVISION=`cat ${path}/wget/DISTRIB_REVISION3`
+	#新旧判断是否执行替换R自定义版本…
+	if [ "${new_DISTRIB_REVISION}_dev_Len yu" != "${old_DISTRIB_REVISION}" ]; then #版本号相等且带_dev_Len yu的情况，则不变，因此要不等于才动作；
+		if [ "${new_DISTRIB_REVISION}" = "${old_DISTRIB_REVISION}" ]; then #版本号相等不带_dev_Len yu 的情况；
+			sed -i "s/${old_DISTRIB_REVISION}/${new_DISTRIB_REVISION}_dev_Len yu/"  ${path}/lede/package/lean/default-settings/files/zzz-default-settings
+		fi
+		echo
+		if [ "${new_DISTRIB_REVISION}" != "${old_DISTRIB_REVISION}" ]; then #版本号不同，可能带 _dev_Len yu，可能不带的情况；
+			grep "DISTRIB_REVISION=" ${path}/lede/package/lean/default-settings/files/zzz-default-settings | cut -d \_ -f 4  > ${path}/wget/DISTRIB_REVISION2
+			len_DISTRIB_REVISION=`cat ${path}/wget/DISTRIB_REVISION2`
+			#判断是否存在Len yu 后缀；
+			if [ "$len_DISTRIB_REVISION" = "Len yu" ]; then
+				sed -i "s/${old_DISTRIB_REVISION}/${new_DISTRIB_REVISION}/"  ${path}/lede/package/lean/default-settings/files/zzz-default-settings
+			else
+				sed -i "s/${old_DISTRIB_REVISION}/${new_DISTRIB_REVISION}_dev_Len yu/"  ${path}/lede/package/lean/default-settings/files/zzz-default-settings
+			fi
+		fi
+	fi
+	rm -rf ${path}/wget/DISTRIB_REVISION*
+	rm -rf ${path}/wget/zzz-default-settings*
+fi
+####；
+#总结判断;
+#监测如果不存在rename.sh则创建该文件；
 if [ ! -f "${path}/lede/rename.sh" ]; then
 cat>${path}/lede/rename.sh<<EOF
 #/usr/bin/bash
