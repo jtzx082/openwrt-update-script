@@ -1,9 +1,9 @@
 #usr/bin/bash
 if [ `whoami` = "root" ];then
     clear
-		echo
-		echo -e "\033[31m警告：请在非root用户下运行该脚本……\033[0m"
-		echo
+	echo
+	echo -e "\033[31m警告：请在非root用户下运行该脚本……\033[0m"
+	echo
     exit
 fi
 path=$(dirname $(readlink -f $0))
