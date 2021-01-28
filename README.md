@@ -2,6 +2,7 @@
 Openwrt 固件一键检测更新/编译固件脚本！
 
 【运行脚本请保证网络能科学】【固件默认x86-64架构】
+
 【IP:192.168.1.2 USER:root PASSWD:password】
 
 1.平台是基于win10 wsl2环境的linux 当然也可以运行到其他地方Linux上;
