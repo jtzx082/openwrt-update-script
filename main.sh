@@ -1,4 +1,8 @@
 #usr/bin/bash
+if [ `whoami` = "root" ];then
+        echo "请在非root用户下运行该脚本…"
+        exit
+fi
 path=$(dirname $(readlink -f $0))
 cd ${path}
 ##################################################
