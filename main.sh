@@ -243,7 +243,9 @@ function dev_force_update()
 if [[  ! -d ${path}/lede  ]]; then
 	clear
 	echo
-	echo "本地没源码，请运行第1项初始化…"
+	echo -e "\033[31m警告：本地还没源码，请选脚本第项目初始化…\033[0m"
+	echo
+	read -n 1 -p  "请回车继续…"
 	echo
 	menu
 fi
@@ -592,7 +594,9 @@ function dev_noforce_update()
 if [[  ! -d ${path}/lede  ]]; then
 	clear
 	echo
-	echo "本地没源码，请运行第1项初始化…"
+	echo -e "\033[31m警告：本地还没源码，请选脚本第项目初始化…\033[0m"
+	echo
+	read -n 1 -p  "请回车继续…"
 	echo
 	menu
 fi
@@ -926,7 +930,9 @@ function sta_force_update()
 if [[  ! -d ${path}/openwrt  ]]; then
 	clear
 	echo
-	echo "本地没源码，请运行第1项初始化…"
+	echo -e "\033[31m警告：本地还没源码，请选脚本第项目初始化…\033[0m"
+	echo
+	read -n 1 -p  "请回车继续…"
 	echo
 	menu
 fi
@@ -1277,7 +1283,9 @@ function sta_noforce_update()
 if [[  ! -d ${path}/openwrt  ]]; then
 	clear
 	echo
-	echo "本地没源码，请运行第1项初始化…"
+	echo -e "\033[31m警告：本地还没源码，请选脚本第项目初始化…\033[0m"
+	echo
+	read -n 1 -p  "请回车继续…"
 	echo
 	menu
 fi
