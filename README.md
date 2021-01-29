@@ -33,15 +33,15 @@ Openwrt 固件一键检测更新/编译固件脚本！
 
 6.附录部分脚本状态图片：
 
-![img_3.png](img_3.png)
+![img_3.png](image/img_3.png)
 
-![img_1.png](img_1.png)
+![img_1.png](image/img_1.png)
 
-![img_2.png](img_2.png)
+![img_2.png](image/img_2.png)
 
 7.附录部分固件状态图片：
 
-![img_4.png](img_4.png)
+![img_4.png](image/img_4.png)
 
-![img_5.png](img_5.png)
+![img_5.png](image/img_5.png)
 
