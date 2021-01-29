@@ -19,7 +19,7 @@ cat <<EOF
 
 Openwrt Firmware One-click Update Compilation Script
 
-Script By Lenyu	Version v2.2.0
+Script By Lenyu	Version v2.2.1
 
 -----------------------------------
 >>>菜单主页:
@@ -235,8 +235,18 @@ case $num2 in
 	echo
 esac
 }
+echo.
+echo
+echo
 function dev_force_update()
 {
+if [[  ! -d ${path}/lede  ]]; then
+	clear
+	echo
+	echo "本地没源码，请运行第1项初始化…"
+	echo
+	menu
+fi
 cd ${path}
 clear
 echo
@@ -579,6 +589,13 @@ echo
 echo
 function dev_noforce_update()
 {
+if [[  ! -d ${path}/lede  ]]; then
+	clear
+	echo
+	echo "本地没源码，请运行第1项初始化…"
+	echo
+	menu
+fi
 cd ${path}
 clear
 echo
@@ -901,10 +918,18 @@ echo
 read -n 1 -p  "请回车继续…"
 menu
 }
-echo
-echo
+
+
+
 function sta_force_update()
 {
+if [[  ! -d ${path}/openwrt  ]]; then
+	clear
+	echo
+	echo "本地没源码，请运行第1项初始化…"
+	echo
+	menu
+fi
 cd ${path}
 clear
 echo
@@ -1124,7 +1149,7 @@ cat>${path}/openwrt/rename.sh<<EOF
 #/usr/bin/bash
 path=\$(dirname \$(readlink -f \$0))
 cd \${path}
-	if [ ! -f \${path}/bin/targets/x86/64/*combined.img.gz ]; then
+	if [ ! -f \${path}/bin/targets/x86/64/*squashfs.img.gz ]; then
 		echo
 		echo "您编译时未选择压缩固件，故不进行重命名操作…"
 		echo
@@ -1133,39 +1158,39 @@ cd \${path}
 		exit 2
 	fi
 	rm -rf \${path}/bin/targets/x86/64/*Lenyu.img.gz
-    	rm -rf \${path}/bin/targets/x86/64/packages
-    	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic.manifest
-    	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-rootfs-squashfs.img.gz
-    	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-combined-squashfs.vmdk
-    	rm -rf \${path}/bin/targets/x86/64/config.seed
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.vmdk
-    	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-vmlinuz
-	rm -rf \${path}/bin/targets/x86/64/config.buildinfo
-	rm -rf \${path}/bin/targets/x86/64/feeds.buildinfo
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-kernel.bin
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.vmdk
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.vmdk
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img.gz
-	rm -rf \${path}/bin/targets/x86/64/version.buildinfo
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img
+        rm -rf \${path}/bin/targets/x86/64/packages
+        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic.manifest
+        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-rootfs-squashfs.img.gz
+        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-combined-squashfs.vmdk
+        rm -rf \${path}/bin/targets/x86/64/config.seed
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.vmdk
+        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-vmlinuz
+		rm -rf \${path}/bin/targets/x86/64/config.buildinfo
+		rm -rf \${path}/bin/targets/x86/64/feeds.buildinfo
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-kernel.bin
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.vmdk
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.vmdk
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img.gz
+		rm -rf \${path}/bin/targets/x86/64/version.buildinfo
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img
     sleep 2
     str1=\`grep "KERNEL_PATCHVER:=" \${path}/target/linux/x86/Makefile | cut -d = -f 2\` #5.4
 	ver414=\`grep "LINUX_VERSION-4.14 =" \${path}/include/kernel-version.mk | cut -d . -f 3\`
 	ver419=\`grep "LINUX_VERSION-4.19 =" \${path}/include/kernel-version.mk | cut -d . -f 3\`
 	ver54=\`grep "LINUX_VERSION-5.4 =" \${path}/include/kernel-version.mk | cut -d . -f 3\`
 	if [ "\$str1" = "5.4" ];then
-		 mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver54}_sta_Lenyu.img.gz
-		mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver54}_uefi-gpt_sta_Lenyu.img.gz
+		 mv \${path}/bin/targets/x86/64/openwrt-x86-64-combined-squashfs.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver54}_sta_Lenyu.img.gz
+		mv \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver54}_uefi-gpt_sta_Lenyu.img.gz
 		exit 0
 	elif [ "\$str1" = "4.19" ];then
-		mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver419}_sta_Lenyu.img.gz
-		mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver419}_uefi-gpt_sta_Lenyu.img.gz
+		mv \${path}/bin/targets/x86/64/openwrt-x86-64-combined-squashfs.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver419}_sta_Lenyu.img.gz
+		mv \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver419}_uefi-gpt_sta_Lenyu.img.gz
 		exit 0
 	elif [ "\$str1" = "4.14" ];then
-		mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver414}_sta_Lenyu.img.gz
-		mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver414}_uefi-gpt_sta_Lenyu.img.gz
+		mv \${path}/bin/targets/x86/64/openwrt-x86-64-combined-squashfs.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver414}_sta_Lenyu.img.gz
+		mv \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver414}_uefi-gpt_sta_Lenyu.img.gz
 		exit 0
 
 	fi
@@ -1243,10 +1268,19 @@ if [[ ("$noopenwrt" = "no_update") && ("$noclash" = "no_update") && ("$noxray" =
 	fi
 fi
 }
-echo
-echo
+
+
+
+
 function sta_noforce_update()
 {
+if [[  ! -d ${path}/openwrt  ]]; then
+	clear
+	echo
+	echo "本地没源码，请运行第1项初始化…"
+	echo
+	menu
+fi
 cd ${path}
 clear
 echo
@@ -1466,7 +1500,7 @@ cat>${path}/openwrt/rename.sh<<EOF
 #/usr/bin/bash
 path=\$(dirname \$(readlink -f \$0))
 cd \${path}
-	if [ ! -f \${path}/bin/targets/x86/64/*combined.img.gz ]; then
+	if [ ! -f \${path}/bin/targets/x86/64/*squashfs.img.gz ]; then
 		echo
 		echo "您编译时未选择压缩固件，故不进行重命名操作…"
 		echo
@@ -1475,39 +1509,39 @@ cd \${path}
 		exit 2
 	fi
 	rm -rf \${path}/bin/targets/x86/64/*Lenyu.img.gz
-    	rm -rf \${path}/bin/targets/x86/64/packages
-    	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic.manifest
-    	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-rootfs-squashfs.img.gz
-    	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-combined-squashfs.vmdk
-    	rm -rf \${path}/bin/targets/x86/64/config.seed
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.vmdk
-    	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-vmlinuz
-	rm -rf \${path}/bin/targets/x86/64/config.buildinfo
-	rm -rf \${path}/bin/targets/x86/64/feeds.buildinfo
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-kernel.bin
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.vmdk
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.vmdk
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img.gz
-	rm -rf \${path}/bin/targets/x86/64/version.buildinfo
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
-	rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img
+        rm -rf \${path}/bin/targets/x86/64/packages
+        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic.manifest
+        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-rootfs-squashfs.img.gz
+        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-combined-squashfs.vmdk
+        rm -rf \${path}/bin/targets/x86/64/config.seed
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.vmdk
+        rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-vmlinuz
+		rm -rf \${path}/bin/targets/x86/64/config.buildinfo
+		rm -rf \${path}/bin/targets/x86/64/feeds.buildinfo
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-kernel.bin
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.vmdk
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.vmdk
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img.gz
+		rm -rf \${path}/bin/targets/x86/64/version.buildinfo
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img
+		rm -rf \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-rootfs.img
     sleep 2
     str1=\`grep "KERNEL_PATCHVER:=" \${path}/target/linux/x86/Makefile | cut -d = -f 2\` #5.4
 	ver414=\`grep "LINUX_VERSION-4.14 =" \${path}/include/kernel-version.mk | cut -d . -f 3\`
 	ver419=\`grep "LINUX_VERSION-4.19 =" \${path}/include/kernel-version.mk | cut -d . -f 3\`
 	ver54=\`grep "LINUX_VERSION-5.4 =" \${path}/include/kernel-version.mk | cut -d . -f 3\`
 	if [ "\$str1" = "5.4" ];then
-		 mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver54}_sta_Lenyu.img.gz
-		mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver54}_uefi-gpt_sta_Lenyu.img.gz
+		 mv \${path}/bin/targets/x86/64/openwrt-x86-64-combined-squashfs.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver54}_sta_Lenyu.img.gz
+		mv \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver54}_uefi-gpt_sta_Lenyu.img.gz
 		exit 0
 	elif [ "\$str1" = "4.19" ];then
-		mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver419}_sta_Lenyu.img.gz
-		mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver419}_uefi-gpt_sta_Lenyu.img.gz
+		mv \${path}/bin/targets/x86/64/openwrt-x86-64-combined-squashfs.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver419}_sta_Lenyu.img.gz
+		mv \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver419}_uefi-gpt_sta_Lenyu.img.gz
 		exit 0
 	elif [ "\$str1" = "4.14" ];then
-		mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver414}_sta_Lenyu.img.gz
-		mv \${path}/bin/targets/x86/64/openwrt-x86-64-generic-squashfs-combined-efi.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver414}_uefi-gpt_sta_Lenyu.img.gz
+		mv \${path}/bin/targets/x86/64/openwrt-x86-64-combined-squashfs.img.gz      \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver414}_sta_Lenyu.img.gz
+		mv \${path}/bin/targets/x86/64/openwrt-x86-64-uefi-gpt-squashfs.img.gz  \${path}/bin/targets/x86/64/openwrt_x86-64-\`date '+%m%d'\`_\${str1}.\${ver414}_uefi-gpt_sta_Lenyu.img.gz
 		exit 0
 
 	fi
