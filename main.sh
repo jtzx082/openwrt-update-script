@@ -51,7 +51,7 @@ case $num1 in
     *)
     echo -e "\033[31m err：请输入正确的编号\033[0m"
     read -n 1 -p  "请回车继续…"
-	menu
+	menub
 esac
 }
 
