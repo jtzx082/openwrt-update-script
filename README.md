@@ -18,7 +18,7 @@ Openwrt 固件一键检测更新/编译固件脚本！
 
     c.简单叙述下脚本特色？
     答：能在win10 wsl2环境的linux的Ubuntu 18+或者其他linux的Ubuntu 18+ 一键运行编译固件；
-    本脚本不仅能自动检测lean大雕开发和稳定版源码分支有无更新，而且同步检测xray、openclash、passwall、helloword等逐渐有无更新，
+    本脚本不仅能自动检测lean大雕开发和稳定版源码分支有无更新，而且同步检测xray、openclash、passwall、helloword等组件有无更新，
     能在有更新的时编译固件；具体的百闻不如一试。
 
 2.脚本升级为一键按傻瓜操作，无需自己配置，只需要准备好良好网络和一台充满能量的linux系统PC;
