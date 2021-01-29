@@ -1,4 +1,4 @@
-# Openwrt_Update
+# Openwrt-Update-Script
 Openwrt 固件一键检测更新/编译固件脚本！
 
 【运行脚本请保证网络能科学】【固件默认x86-64架构·不要在root账户下运行】
