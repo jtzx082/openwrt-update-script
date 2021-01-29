@@ -9,24 +9,15 @@ fi
 path=$(dirname $(readlink -f $0))
 cd ${path}
 ##################################################
-echo
-echo
-function menu()
+function menub()
 {
 clear
 echo -e `date`
 cat <<EOF
-
-Openwrt Firmware One-click Update Compilation Script
-
-Script By Lenyu	Version v2.2.1
-
 -----------------------------------
 >>>菜单主页:
 `echo -e "\033[35m 1)首次运行固件更新编译脚本\033[0m"`
-`echo -e "\033[35m 2)开发版-固件编译\033[0m"`
-`echo -e "\033[35m 3)稳定版-固件编译\033[0m"`
-`echo -e "\033[35m 4)主菜单\033[0m"`
+`echo -e "\033[35m 2)主菜单\033[0m"`
 `echo -e "\033[35m Q)退出\033[0m"`
 EOF
 read -n 1 -p  "请输入对应序列号：" num1
@@ -50,14 +41,50 @@ case $num1 in
 	fi
     ;;
     2)
+    echo -e "\033[32m >>>返回主菜单-> \033[0m"
+    menu
+    ;;
+    Q|q)
+    echo -e "\n\033[32m--------退出--------- \033[0m"
+    exit 0
+    ;;
+    *)
+    echo -e "\033[31m err：请输入正确的编号\033[0m"
+    read -n 1 -p  "请回车继续…"
+	menu
+esac
+}
+
+
+
+function menu()
+{
+clear
+echo -e `date`
+cat <<EOF
+
+Openwrt Firmware One-click Update Compilation Script
+
+Script By Lenyu	Version v2.2.1
+
+-----------------------------------
+>>>菜单主页:
+`echo -e "\033[35m 1)开发版-固件编译\033[0m"`
+`echo -e "\033[35m 2)稳定版-固件编译\033[0m"`
+`echo -e "\033[35m 3)主菜单\033[0m"`
+`echo -e "\033[35m Q)退出\033[0m"`
+EOF
+read -n 1 -p  "请输入对应序列号：" num1
+case $num1 in
+    1)
     echo -e "\033[32m >>>开发版-固件编译-> \033[0m"
 	_dev_update
     ;;
-    3)
+    2)
     echo -e "\033[32m >>>稳定版-固件编译-> \033[0m"
     _sta_update
     ;;
-    4)
+    3)
     echo -e "\033[32m >>>返回主菜单-> \033[0m"
     menu
     ;;
@@ -188,6 +215,7 @@ case $num2 in
 	echo
 	read -n 1 -p  "请回车，返回主菜单操作…"
 	echo
+	menu
     ;;
     2)
     echo -e "\033[32m >>>正在拉去稳定版源码，请稍后…-> \033[0m"
@@ -226,6 +254,7 @@ case $num2 in
 	echo
 	read -n 1 -p  "请回车，返回主菜单操作…"
 	echo
+	menu
 	;;
     *)
     echo -e "\033[31m err：请输入正确的编号\033[0m"
@@ -235,9 +264,9 @@ case $num2 in
 	echo
 esac
 }
-echo.
-echo
-echo
+
+
+
 function dev_force_update()
 {
 if [[  ! -d ${path}/lede  ]]; then
@@ -247,7 +276,7 @@ if [[  ! -d ${path}/lede  ]]; then
 	echo
 	read -n 1 -p  "请回车继续…"
 	echo
-	menu
+	menub
 fi
 cd ${path}
 clear
@@ -598,7 +627,7 @@ if [[  ! -d ${path}/lede  ]]; then
 	echo
 	read -n 1 -p  "请回车继续…"
 	echo
-	menu
+	menub
 fi
 cd ${path}
 clear
@@ -934,7 +963,7 @@ if [[  ! -d ${path}/openwrt  ]]; then
 	echo
 	read -n 1 -p  "请回车继续…"
 	echo
-	menu
+	menub
 fi
 cd ${path}
 clear
@@ -1287,7 +1316,7 @@ if [[  ! -d ${path}/openwrt  ]]; then
 	echo
 	read -n 1 -p  "请回车继续…"
 	echo
-	menu
+	menub
 fi
 cd ${path}
 clear
@@ -1611,5 +1640,4 @@ echo
 read -n 1 -p  "请回车继续…"
 menu
 }
-echo
 menu
