@@ -181,6 +181,91 @@ case $num1 in
 esac
 }
 
+function _dev_dl_downlaond()
+{
+clear
+echo -e `date`
+cat <<EOF
+-----------------------------------
+`echo -e "\033[35m 由于您是首次下载源码编译，作者热心给您准备好源码所需dl文件，您是选择下载?"`
+EOF
+read -n 1 -p  " 选择下载输入(Y/N)：" num1
+case $num1 in
+	Y|y)
+    echo -e "\033[32m >>>正在从谷歌网盘拉取dl文件，请稍后…-> \033[0m"
+	echo
+	wget -P ${path}/wget/gdlink 'https://git.io/Jt4cj' -O ${path}/wget/gdlink
+	bash ${path}/wget/gdlink 'https://drive.google.com/u/0/uc?id=1BJTkJgwinKL67i0gb_tG2p3OE-Hv_4uA&export=download' |xargs -n1 wget -c -O ${path}/dev_dl.tar.gz
+	if [[ ! -f ${path}/dev_dl.tar.gz ]]; then
+		echo "您下载dl文件失败，请检查网络重试…"
+		_dev_dl_downlaond
+	fi
+	tar -zxvf ${path}/dev_dl.tar.gz && mv -f ${path}/dev_dl/* ${path}/lede/dl >/dev/null 2>&1
+	echo
+	echo -e "\033[32m >>>开发版-源码初始化完成…-> \033[0m"
+	echo
+	read -n 1 -p  "请回车，返回主菜单操作…"
+	echo
+	menu
+    ;;
+    n|N)
+	echo
+	echo -e "\033[32m >>>开发版-源码初始化完成…-> \033[0m"
+	echo
+	read -n 1 -p  "请回车，返回主菜单操作…"
+	echo
+	menu
+	;;
+    *)
+    echo -e "\033[31m err：智能选择Y/N\033[0m"
+    read -n 1 -p  "请回车继续…"
+	_dev_dl_downlaond
+esac
+}
+
+function _sta_dl_downlaond()
+{
+clear
+echo -e `date`
+cat <<EOF
+-----------------------------------
+`echo -e "\033[35m 由于您是首次下载源码编译，作者热心给您准备好源码所需dl文件，您是选择下载?"`
+EOF
+read -n 1 -p  " 选择下载输入(Y/N)：" num1
+case $num1 in
+	Y|y)
+     echo -e "\033[32m >>>正在从谷歌网盘拉取dl文件，请稍后…-> \033[0m"
+	echo
+	wget -P ${path}/wget/gdlink 'https://git.io/Jt4cj' -O ${path}/wget/gdlink
+	bash ${path}/wget/gdlink 'https://drive.google.com/u/0/uc?id=1QsoMiy4s0ovNLcbETSaYWEpM_0YYP0rA&export=download' |xargs -n1 wget -c -O ${path}/sta_dl.tar.gz
+	if [[ ! -f ${path}/sta_dl.tar.gz ]]; then
+		echo "您下载dl文件失败，请检查网络重试…"
+		_dev_dl_downlaond
+	fi
+	tar -zxvf ${path}/sta_dl.tar.gz && mv -f ${path}/sta_dl/* ${path}/openwrt/dl >/dev/null 2>&1\
+	echo
+	echo -e "\033[32m >>>开发版-源码初始化完成…-> \033[0m"
+	echo
+	read -n 1 -p  "请回车，返回主菜单操作…"
+	echo
+	menu
+    ;;
+    n|N)
+	echo
+	echo -e "\033[32m >>>开发版-源码初始化完成…-> \033[0m"
+	echo
+	read -n 1 -p  "请回车，返回主菜单操作…"
+	echo
+	menu
+    ;;
+    *)
+    echo -e "\033[31m err：智能选择Y/N\033[0m"
+    read -n 1 -p  "请回车继续…"
+	_sta_dl_downlaond
+esac
+}
+
+
 function _lede_code()
 {
 cat <<EOF
@@ -221,13 +306,8 @@ case $num2 in
 	wget -P ${path}/wget https://raw.githubusercontent.com/Lenyu2020/openwrt_update/main/file/dev_diff -O  ${path}/wget/dev_diff >/dev/null 2>&1
 	sleep 0.3
 	mv ${path}/wget/dev_diff ${path}/lede/.config
-	clear
 	echo
-	echo -e "\033[32m >>>开发版-源码初始化完成…-> \033[0m"
-	echo
-	read -n 1 -p  "请回车，返回主菜单操作…"
-	echo
-	menu
+	_dev_dl_downlaond
     ;;
     2)
     echo -e "\033[32m >>>正在拉去稳定版源码，请稍后…-> \033[0m"
@@ -260,13 +340,8 @@ case $num2 in
 	wget -P ${path}/wget https://raw.githubusercontent.com/Lenyu2020/openwrt_update/main/file/sta_diff -O  ${path}/wget/sta_diff >/dev/null 2>&1
 	sleep 0.3
 	mv ${path}/wget/sta_diff ${path}/lede/.config
-	clear
 	echo
-	echo -e "\033[32m >>>稳定版-源码初始化完成…-> \033[0m"
-	echo
-	read -n 1 -p  "请回车，返回主菜单操作…"
-	echo
-	menu
+	_sta_dl_downlaond
 	;;
     *)
     echo -e "\033[31m err：请输入正确的编号\033[0m"
