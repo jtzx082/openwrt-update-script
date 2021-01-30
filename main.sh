@@ -3,16 +3,17 @@ function _sys_judg()
 {
 sysa=`cat /etc/issue`
 sysb="Ubuntu"
+sysc=`getconf LONG_BIT`
 if [[ `whoami` = "root" ]];then
     clear
     echo
     echo -e "\033[31m警告：请在非root用户下运行该脚本……\033[0m"
     echo
     exit
-elif [[ $sysa != *$sysb* ]]; then
+elif [[ ( $sysa != *$sysb* ) || ( $sysc != 64 ) ]]; then
 	clear
     echo
-    echo -e "\033[31m警告：请在Ubuntu18-64系统下运行该脚本……\033[0m"
+    echo -e "\033[31m警告：请在Ubuntu18+ x64系统下运行该脚本……\033[0m"
     echo
     exit
 fi
@@ -76,7 +77,7 @@ cat <<EOF
 
 Openwrt Firmware One-click Update Compilation Script
 
-Script By Lenyu	Version v2.2.1
+Script By Lenyu	Version v2.2.2
 
 -----------------------------------
 >>>菜单主页:

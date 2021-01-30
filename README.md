@@ -5,7 +5,7 @@ Openwrt 固件一键检测更新/编译固件脚本！
 
 【IP:192.168.1.2 USER:root PASSWD:password】
 
-1.平台是基于win10 wsl2环境的linux 当然也可以运行到其他地方Linux上，推荐 Ubuntu 18+ x64：
+1.平台是基于win10 wsl2环境的linux 当然也可以运行到其他地方Linux上，推荐Ubuntu 18 LTS x64：
     
     a.脚本一键运行后有哪些插件？
     答：基本上就是群主自己定义的简单固件，大致包含常用插件该有的都有，但是绝不臃肿，可以看看下面部分固件截图；
@@ -17,7 +17,7 @@ Openwrt 固件一键检测更新/编译固件脚本！
     注：自定义只需要修改一次！！只要不删除源码，自定义的不会被脚本覆盖。
 
     c.简单叙述下脚本特色？
-    答：能在win10 wsl2环境的linux的Ubuntu 18+或者其他linux的Ubuntu 18+ 一键运行编译固件；
+    答：能在win10 wsl2环境的linux的Ubuntu 18 x64或者其他linux的Ubuntu 18 x64一键运行编译固件；
     本脚本不仅能自动检测lean大雕开发和稳定版源码分支有无更新，而且同步检测xray、openclash、passwall、helloword等组件有无更新，能在有更新的
     时编译固件；具体的百闻不如一试。
 
