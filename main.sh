@@ -202,6 +202,7 @@ case $num1 in
 	fi
 	tar -zxvf ${path}/dev_dl.tar.gz && mv -f ${path}/dev_dl/* ${path}/lede/dl >/dev/null 2>&1
 	rm -rf ${path}/wget/gdlink
+	rm -rf ${path}/dev_dl.tar.gz
 	echo
 	echo -e "\033[32m >>>开发版-源码初始化完成…-> \033[0m"
 	echo
@@ -246,6 +247,7 @@ case $num1 in
 	fi
 	tar -zxvf ${path}/sta_dl.tar.gz && mv -f ${path}/sta_dl/* ${path}/openwrt/dl >/dev/null 2>&1\
 	rm -rf ${path}/wget/gdlink
+	rm -rf ${path}/dev_dl.tar.gz
 	echo
 	echo -e "\033[32m >>>开发版-源码初始化完成…-> \033[0m"
 	echo
