@@ -36,7 +36,7 @@ read -n 1 -p  "请输入对应序列号：" num1
 case $num1 in
 	1)
     echo -e "\033[32m >>>首次运行固件更新编译脚本-> \033[0m"
-	if [[ ( ! -d ${path}/lede ) &&  ( ! -d ${path}/openwrt ) ]]; then
+	if [[ ( ! -d ${path}/lede ) ||  ( ! -d ${path}/openwrt ) ]]; then
 		clear
 		echo
 		echo "本地没源码，正在准备拉去源码…"
