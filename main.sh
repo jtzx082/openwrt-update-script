@@ -201,6 +201,7 @@ case $num1 in
 		_dev_dl_downlaond
 	fi
 	tar -zxvf ${path}/dev_dl.tar.gz && mv -f ${path}/dev_dl/* ${path}/lede/dl >/dev/null 2>&1
+	rm -rf ${path}/wget/gdlink
 	echo
 	echo -e "\033[32m >>>开发版-源码初始化完成…-> \033[0m"
 	echo
@@ -214,10 +215,11 @@ case $num1 in
 	echo
 	read -n 1 -p  "请回车，返回主菜单操作…"
 	echo
+	rm -rf ${path}/wget/gdlink
 	menu
 	;;
     *)
-    echo -e "\033[31m err：智能选择Y/N\033[0m"
+    echo -e "\033[31m err：只能选择Y/N\033[0m"
     read -n 1 -p  "请回车继续…"
 	_dev_dl_downlaond
 esac
@@ -243,6 +245,7 @@ case $num1 in
 		_dev_dl_downlaond
 	fi
 	tar -zxvf ${path}/sta_dl.tar.gz && mv -f ${path}/sta_dl/* ${path}/openwrt/dl >/dev/null 2>&1\
+	rm -rf ${path}/wget/gdlink
 	echo
 	echo -e "\033[32m >>>开发版-源码初始化完成…-> \033[0m"
 	echo
@@ -256,10 +259,11 @@ case $num1 in
 	echo
 	read -n 1 -p  "请回车，返回主菜单操作…"
 	echo
+	rm -rf ${path}/wget/gdlink
 	menu
     ;;
     *)
-    echo -e "\033[31m err：智能选择Y/N\033[0m"
+    echo -e "\033[31m err：只能选择Y/N\033[0m"
     read -n 1 -p  "请回车继续…"
 	_sta_dl_downlaond
 esac
