@@ -1,11 +1,22 @@
 #usr/bin/bash
-if [ `whoami` = "root" ];then
+function _sys_judg()
+{
+sysa=`cat /etc/issue`
+sysb="Ubuntu"
+if [[ `whoami` = "root" ]];then
     clear
     echo
     echo -e "\033[31m警告：请在非root用户下运行该脚本……\033[0m"
     echo
     exit
+elif [[ $sysa != *$sysb* ]]; then
+	clear
+    echo
+    echo -e "\033[31m警告：请在Ubuntu18-64系统下运行该脚本……\033[0m"
+    echo
+    exit
 fi
+}
 path=$(dirname $(readlink -f $0))
 cd ${path}
 ##################################################
@@ -1640,4 +1651,5 @@ echo
 read -n 1 -p  "请回车继续…"
 menu
 }
+_sys_judg
 menu
